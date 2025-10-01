@@ -1,36 +1,8 @@
 //basemaps
 var map = L.map('combomap').setView([38, -95], 4);
 var basemapUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-var basemap =  L.tileLayer(basemapUrl, {attribution: '&copy; <a href="http://' + 'www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
-
-//earthquake data pull
-var url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2025-08-01&endtime=2025-08-05&minmagnitude=1.0";
-
-$.getJSON(url, function(data) {
-    
-    L.geoJSON(data, {
-        pointToLayer: function(feature, latlng){
-            var mag = feature.properties.mag
-            var color = mag >= 5 ? 'red': mag >= 3 ? 'orange': mag >= 1 ? 'yellow': 'white';
-        
-    return L.circleMarker(latlng, {
-          radius: 2,
-          color: color,
-          fillOpacity: 0.6
-            });
-        },
-
-          onEachFeature: function(feature, layer) {
-        var props = feature.properties;
-        var popupContent = `
-          <strong>${props.place}</strong><br>
-          Magnitude: ${props.mag}<br>
-         Time: ${props.starttime}
-        `;
-        layer.bindPopup(popupContent);
-      }
-    }).addTo(map);
-});
+var basemap =  L.tileLayer(basemapUrl, {attribution: '&copy; <a href="http://' + 'www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
 
 //weather data pull
 var radarUrl = 'https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi';
@@ -61,3 +33,40 @@ $.getJSON(weatherAlertsUrl, function(data) {
       }).addTo(map);
       });
 
+//earthquake data pull
+var earthquakes
+
+var url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2025-09-29&endtime=2025-09-30&minmagnitude=1.0";
+$.getJSON(url, function(data) {
+    
+   earthquakes = L.geoJSON(data, {
+        pointToLayer: function(feature, latlng){
+            var mag = feature.properties.mag
+            var color = mag >= 5 ? 'red': mag >= 3 ? 'orange': mag >= 1 ? 'yellow': 'white';
+        
+    return L.circleMarker(latlng, {
+          radius: 2,
+          color: color,
+          fillOpacity: 0.6
+            });
+        },
+
+          onEachFeature: function(feature, layer) {
+        var props = feature.properties;
+        var popupContent = `
+          <strong>${props.place}</strong><br>
+          Magnitude: ${props.mag}<br>
+         Time: ${props.starttime}
+        `;
+        layer.bindPopup(popupContent);
+      }
+    });
+
+
+var overlayMaps = {
+        "Weather Radar": radar,
+        "Earthquakes": earthquakes
+      };
+
+      L.control.layers({ "OpenStreetMap": basemap }, overlayMaps).addTo(map);
+    });
