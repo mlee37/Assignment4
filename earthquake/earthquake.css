@@ -1,0 +1,19 @@
+head {
+   <style>
+  .legend {
+    float: left;
+    margin-right: 8px;
+    opacity: 0.8;
+  }
+</style>
+}
+
+body {
+    padding: 0;
+    margin: 0;
+   }
+   html, body, #earthquakemap {
+    height: 100%;
+    width: 100%;
+   }
+ 
