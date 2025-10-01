@@ -36,7 +36,7 @@ $.getJSON(weatherAlertsUrl, function(data) {
 //earthquake data pull
 var earthquakes
 
-var url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2025-09-29&endtime=2025-09-30&minmagnitude=1.0";
+var url = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2025-09-28&endtime=2025-10-01&minmagnitude=1.0";
 $.getJSON(url, function(data) {
     
    earthquakes = L.geoJSON(data, {
